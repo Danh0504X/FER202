@@ -1,0 +1,113 @@
+.pcard{
+  border: 1px solid #e9ecef;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  height: 100%;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.pcard:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+}
+
+.pcard-imgWrap{
+  position: relative;
+}
+
+.pcard-img{
+  width: 100%;
+  height: 170px;       /* ảnh đồng đều */
+  object-fit: cover;   /* không méo */
+  display: block;
+}
+
+.pcard-tags{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.pcard-tag{
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: #111;
+  background: #ffd43b;
+}
+
+.pcard-tag.is-new{
+  background: #ff4d6d;
+  color: #fff;
+}
+
+.pcard-tag.is-sale{
+  background: #ffd43b;
+  color: #111;
+}
+
+.pcard-body{
+  padding: 12px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 150px; /* giúp các card đều */
+}
+
+.pcard-top{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pcard-title{
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.pcard-id{
+  background: #6c757d;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.pcard-desc{
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.4;
+  min-height: 40px;
+}
+
+.pcard-price{
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.pcard-old{
+  text-decoration: line-through;
+  color: #6c757d;
+  opacity: 0.75;
+}
+S
+.pcard-new{
+  font-size: 22px;
+  font-weight: 900;
+  color: #111;
+}
