@@ -6,7 +6,6 @@ import "../pizzaSliderRow.css";
 export default function PizzaSliderRow({ items = [], title = "Pizza" }) {
   const trackRef = useRef(null);
 
-  // ✅ state cho modal
   const [showDetail, setShowDetail] = useState(false);
   const [selectedPizza, setSelectedPizza] = useState(null);
 
@@ -58,13 +57,11 @@ export default function PizzaSliderRow({ items = [], title = "Pizza" }) {
       <div className="psr-track" ref={trackRef}>
         {items.map((p) => (
           <div className="psr-item" key={p.id}>
-            {/* ✅ truyền callback xuống card */}
             <PizzaCard item={p} onViewDetail={openDetail} />
           </div>
         ))}
       </div>
 
-      {/* ✅ 1 modal dùng chung */}
       <ViewDetailModal show={showDetail} handleClose={closeDetail} pizza={selectedPizza} />
     </section>
   );

@@ -2,7 +2,7 @@ import React from "react";
 
 import HeroCarousel from "../components/HeroCarousel.jsx";
 import BookingForm from "../components/Booking.jsx";
-import { banners } from "../data/bannerImages.js";     // đúng theo cây thư mục bạn chụp
+import { banners } from "../data/bannerImages.js";     
 
 import { pizzaList } from "../data/PizzaList.js";
 import PizzaSliderRow from "../components/PizzaSliderRow.jsx";
