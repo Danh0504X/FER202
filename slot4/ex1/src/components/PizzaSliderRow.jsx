@@ -1,15 +1,29 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import PizzaCard from "./PizzaCard";
+import ViewDetailModal from "./ViewDetailModal";
 import "../pizzaSliderRow.css";
 
 export default function PizzaSliderRow({ items = [], title = "Pizza" }) {
   const trackRef = useRef(null);
 
+  // ✅ state cho modal
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedPizza, setSelectedPizza] = useState(null);
+
+  const openDetail = (pizza) => {
+    setSelectedPizza(pizza);
+    setShowDetail(true);
+  };
+
+  const closeDetail = () => {
+    setShowDetail(false);
+    setSelectedPizza(null);
+  };
+
   const scrollByCards = (dir) => {
     const el = trackRef.current;
     if (!el) return;
 
-    // scroll theo ~ 1 card (có gap)
     const card = el.querySelector(".psr-item");
     const step = card ? card.offsetWidth + 16 : 320;
 
@@ -44,10 +58,14 @@ export default function PizzaSliderRow({ items = [], title = "Pizza" }) {
       <div className="psr-track" ref={trackRef}>
         {items.map((p) => (
           <div className="psr-item" key={p.id}>
-            <PizzaCard item={p} />
+            {/* ✅ truyền callback xuống card */}
+            <PizzaCard item={p} onViewDetail={openDetail} />
           </div>
         ))}
       </div>
+
+      {/* ✅ 1 modal dùng chung */}
+      <ViewDetailModal show={showDetail} handleClose={closeDetail} pizza={selectedPizza} />
     </section>
   );
 }

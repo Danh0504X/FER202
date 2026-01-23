@@ -1,33 +1,37 @@
+/* ===== Pizza Card (Clean + Balanced) ===== */
+
 .pcard{
   border: 1px solid #e9ecef;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   background: #fff;
   height: 100%;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   transition: transform .18s ease, box-shadow .18s ease;
 }
 
 .pcard:hover{
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
 }
 
+/* Image */
 .pcard-imgWrap{
   position: relative;
 }
 
 .pcard-img{
   width: 100%;
-  height: 170px;       /* ảnh đồng đều */
-  object-fit: cover;   /* không méo */
+  height: 180px;
+  object-fit: cover;
   display: block;
 }
 
+/* Tags */
 .pcard-tags{
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 12px;
+  left: 12px;
   display: flex;
   gap: 8px;
   z-index: 2;
@@ -35,29 +39,32 @@
 
 .pcard-tag{
   font-size: 12px;
-  font-weight: 700;
-  padding: 4px 10px;
+  font-weight: 800;
+  padding: 6px 12px;
   border-radius: 999px;
-  color: #111;
-  background: #ffd43b;
+  letter-spacing: .3px;
+  user-select: none;
 }
 
 .pcard-tag.is-new{
   background: #ff4d6d;
   color: #fff;
+  box-shadow: 0 8px 18px rgba(255,77,109,0.25);
 }
 
 .pcard-tag.is-sale{
   background: #ffd43b;
   color: #111;
+  box-shadow: 0 8px 18px rgba(255,212,59,0.25);
 }
 
+/* Body */
 .pcard-body{
-  padding: 12px 12px 14px;
+  padding: 14px 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  min-height: 150px; /* giúp các card đều */
+  gap: 10px;
+  min-height: 170px;
 }
 
 .pcard-top{
@@ -70,17 +77,18 @@
 .pcard-title{
   margin: 0;
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1.2;
+  color: #111;
 }
 
 .pcard-id{
   background: #6c757d;
   color: #fff;
   font-size: 12px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 8px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 10px;
   white-space: nowrap;
   margin-top: 2px;
 }
@@ -89,10 +97,11 @@
   margin: 0;
   color: #6c757d;
   font-size: 14px;
-  line-height: 1.4;
-  min-height: 40px;
+  line-height: 1.45;
+  min-height: 44px;
 }
 
+/* Price */
 .pcard-price{
   margin-top: auto;
   display: flex;
@@ -104,10 +113,58 @@
   text-decoration: line-through;
   color: #6c757d;
   opacity: 0.75;
+  font-weight: 700;
 }
-S
+
 .pcard-new{
   font-size: 22px;
   font-weight: 900;
   color: #111;
+}
+
+/* Buttons (Balanced) */
+.pcard-actions{
+  display: flex;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.pcard-detailBtn{
+  flex: 3;                 /* 60% */
+  height: 56px;
+  border-radius: 16px;
+  border: none;
+  font-weight: 900;
+  font-size: 18px;
+  background: #2c2c2c;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform .15s ease, filter .15s ease;
+}
+
+.pcard-buyBtn{
+  flex: 2;                 /* 40% */
+  height: 56px;
+  border-radius: 16px;
+  border: none;
+  font-weight: 900;
+  font-size: 18px;
+  background: #dc3545;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform .15s ease, filter .15s ease;
+}
+
+.pcard-detailBtn:hover,
+.pcard-buyBtn:hover{
+  filter: brightness(1.06);
+  transform: translateY(-1px);
 }

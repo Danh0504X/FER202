@@ -1,0 +1,153 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Glass + gradient nhẹ + shadow */
+.app-navbar {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 16, 16, 0.88),
+    rgba(26, 26, 26, 0.78)
+  );
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  padding: 0.75rem 0;
+}
+
+/* Brand */
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none !important;
+}
+
+.app-brand-badge {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(220, 53, 69, 0.18);
+  border: 1px solid rgba(220, 53, 69, 0.35);
+  box-shadow: 0 10px 24px rgba(220, 53, 69, 0.20);
+}
+
+.app-brand-text {
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  font-size: 1.35rem;
+  color: #fff;
+}
+
+/* Nav links */
+.app-link {
+  position: relative;
+  color: rgba(255, 255, 255, 0.78) !important;
+  padding: 0.55rem 0.95rem !important;
+  border-radius: 12px;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+  font-weight: 600;
+}
+
+.app-link:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-1px);
+}
+
+/* Active underline + glow */
+.app-link.active {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.app-link.active::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(220, 53, 69, 0.95);
+  box-shadow: 0 0 18px rgba(220, 53, 69, 0.55);
+}
+
+/* CTA */
+.app-cta {
+  margin-left: 6px;
+  padding: 0.55rem 1.0rem !important;
+  border-radius: 14px;
+  font-weight: 800 !important;
+  color: #fff !important;
+  background: rgba(220, 53, 69, 0.95);
+  border: 1px solid rgba(220, 53, 69, 0.85);
+  box-shadow: 0 12px 26px rgba(220, 53, 69, 0.25);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.app-cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+/* Search (pill) */
+.app-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-top: 0.85rem;
+  width: min(520px, 100%);
+}
+
+@media (min-width: 992px) {
+  .app-search {
+    margin-top: 0;
+  }
+}
+
+.app-search-icon {
+  position: absolute;
+  left: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+.app-search-input {
+  width: 100%;
+  padding: 0.62rem 0.95rem 0.62rem 2.4rem !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+  outline: none !important;
+}
+
+.app-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.50);
+}
+
+.app-search-input:focus {
+  border-color: rgba(220, 53, 69, 0.7) !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15) !important;
+}
+
+.app-search-btn {
+  margin-left: 10px;
+  border-radius: 999px !important;
+  padding: 0.62rem 1rem !important;
+  border: 1px solid rgba(220, 53, 69, 0.95) !important;
+  background: rgba(220, 53, 69, 0.95) !important;
+  font-weight: 800 !important;
+  min-width: 92px;
+}
+
+.app-search-btn:hover {
+  filter: brightness(1.05);
+}
