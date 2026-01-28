@@ -1,0 +1,166 @@
+/* src/styles/nav.css */
+:root {
+  --nav-bg: #ffffff;
+  --nav-page-bg: #f8fafc;
+  --nav-text: #0f172a;
+  --nav-muted: rgba(15, 23, 42, 0.72);
+  --nav-border: #e2e8f0;
+  --nav-primary: #2563eb;
+
+  --nav-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+  --nav-shadow-hover: 0 12px 30px rgba(2, 6, 23, 0.12);
+
+  --radius-wrap: 16px;
+  --radius-pill: 999px;
+
+  --pad-wrap: 10px;
+  --pad-pill-y: 10px;
+  --pad-pill-x: 14px;
+
+  --dur: 240ms;
+  --easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Optional: cho đẹp tổng thể nền trang */
+body {
+  background: var(--nav-page-bg);
+}
+
+/* Wrapper của thanh tab */
+.appTabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  padding: var(--pad-wrap);
+  background: var(--nav-bg);
+
+  border: 1px solid var(--nav-border);
+  border-radius: var(--radius-wrap);
+  box-shadow: var(--nav-shadow);
+
+  /* để pseudo-element không “lụt” ra ngoài */
+  overflow: clip;
+}
+
+/* Mỗi tab (NavLink) */
+.appTab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--pad-pill-y) var(--pad-pill-x);
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+
+  color: var(--nav-muted);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  background: rgba(37, 99, 235, 0.06); /* tint nhẹ */
+  backdrop-filter: saturate(120%);
+
+  transition:
+    transform var(--dur) var(--easing),
+    box-shadow var(--dur) var(--easing),
+    background var(--dur) var(--easing),
+    color var(--dur) var(--easing),
+    border-color var(--dur) var(--easing);
+}
+
+/* Icon/Badge (nếu sau này có) */
+.appTab > * {
+  pointer-events: none;
+}
+
+/* Hover: nâng nhẹ + đổi shadow + màu */
+.appTab:hover {
+  transform: translateY(-2px);
+  background: rgba(37, 99, 235, 0.12);
+  box-shadow: var(--nav-shadow-hover);
+  color: var(--nav-text);
+  border-color: rgba(37, 99, 235, 0.18);
+}
+
+/* Focus visible: outline rõ ràng, đẹp */
+.appTab:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 3px;
+}
+
+/* Active: gradient + glow */
+.appTab.active {
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 55%, #0b5cff 100%);
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow:
+    0 10px 24px rgba(37, 99, 235, 0.25),
+    0 0 0 4px rgba(37, 99, 235, 0.14);
+}
+
+/* Active hover: vẫn giữ active nhưng “nổi” hơn chút */
+.appTab.active:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 34px rgba(37, 99, 235, 0.32),
+    0 0 0 4px rgba(37, 99, 235, 0.16);
+}
+
+/* ===== Underline / Indicator kiểu CSS đơn giản =====
+   Không JS: dùng underline “trượt” nhẹ ngay dưới text của tab đang hover/active.
+   (Indicator toàn-width chạy theo tab cần JS để đo vị trí; cách này vẫn tạo cảm giác mượt và clean.)
+*/
+.appTab::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 6px;
+
+  height: 3px;
+  border-radius: 999px;
+
+  background: rgba(37, 99, 235, 0.0);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--easing), background var(--dur) var(--easing);
+}
+
+.appTab:hover::after {
+  background: rgba(37, 99, 235, 0.45);
+  transform: scaleX(1);
+}
+
+.appTab.active::after {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scaleX(1);
+}
+
+/* Responsive: trên màn nhỏ, tab dễ bấm hơn */
+@media (max-width: 576px) {
+  .appTabs {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .appTab {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
+
+/* Người dùng chọn giảm motion */
+@media (prefers-reduced-motion: reduce) {
+  .appTab,
+  .appTab::after {
+    transition: none !important;
+  }
+
+  .appTab:hover,
+  .appTab.active:hover {
+    transform: none;
+  }
+}

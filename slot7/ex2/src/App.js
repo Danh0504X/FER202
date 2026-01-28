@@ -1,19 +1,20 @@
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './App.css';
-import "bootstrap/dist/css/bootstrap.min.css";
-import QuantityEditor from './components/QuantityEditor';
-import "bootstrap/dist/css/bootstrap.min.css";
-import Modal from './components/Exercise2Modal';
+import NavExercise from "./components/Nav";
+import AppRoutes from "./routes/AppRoutes";
 
-function App() {
- return(
-  <>
-    <QuantityEditor />
-    <Modal/>
-  </>
-
- );
-
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Container className="py-3">
+        <NavExercise />
+        <div className="mt-3">
+          <AppRoutes />
+        </div>
+      </Container>
+    </BrowserRouter>
+  );
 }
-
-export default App;
