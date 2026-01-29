@@ -7,44 +7,115 @@
   --nav-border: #e2e8f0;
   --nav-primary: #2563eb;
 
-  --nav-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
-  --nav-shadow-hover: 0 12px 30px rgba(2, 6, 23, 0.12);
+  --shadow: 0 10px 28px rgba(2, 6, 23, 0.08);
+  --shadow-hover: 0 16px 36px rgba(2, 6, 23, 0.14);
 
-  --radius-wrap: 16px;
+  --radius-wrap: 18px;
   --radius-pill: 999px;
 
-  --pad-wrap: 10px;
+  --pad-wrap: 12px;
   --pad-pill-y: 10px;
   --pad-pill-x: 14px;
 
-  --dur: 240ms;
+  --dur: 260ms;
   --easing: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Optional: cho đẹp tổng thể nền trang */
+/* Optional nền */
 body {
   background: var(--nav-page-bg);
 }
 
-/* Wrapper của thanh tab */
+/* ===== NAV WRAP ===== */
 .appTabs {
   position: relative;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
 
   padding: var(--pad-wrap);
-  background: var(--nav-bg);
-
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
   border: 1px solid var(--nav-border);
   border-radius: var(--radius-wrap);
-  box-shadow: var(--nav-shadow);
+  box-shadow: var(--shadow);
 
-  /* để pseudo-element không “lụt” ra ngoài */
   overflow: clip;
+  isolation: isolate;
 }
 
-/* Mỗi tab (NavLink) */
+/* Ambient glow background (rất nhẹ, enterprise) */
+.appTabs::before {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  background:
+    radial-gradient(closest-side, rgba(37, 99, 235, 0.12), transparent 60%),
+    radial-gradient(closest-side, rgba(16, 185, 129, 0.08), transparent 60%);
+  filter: blur(18px);
+  opacity: 0.65;
+  z-index: -2;
+}
+
+/* “sheen” chạy chậm phía sau */
+.appTabs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(37, 99, 235, 0.10) 30%,
+    transparent 60%
+  );
+  transform: translateX(-60%);
+  animation: navSheen 7s ease-in-out infinite;
+  opacity: 0.55;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes navSheen {
+  0%   { transform: translateX(-70%); opacity: 0.35; }
+  35%  { opacity: 0.65; }
+  60%  { opacity: 0.5; }
+  100% { transform: translateX(70%); opacity: 0.35; }
+}
+
+/* ===== HEADER TEXT “Ex5 Navigation” =====
+   Bạn đang render: <>Ex5 Navigation</>
+   Nên mình style bằng selector :first-child (text node sẽ nằm trước NavLink).
+   Để chắc chắn đẹp hơn, mình khuyên bạn bọc nó bằng <span className="navBrand">...</span>.
+*/
+.appTabs .navBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  color: var(--nav-text);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.10);
+
+  margin-right: 2px;
+}
+
+.appTabs .navBrand::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #93c5fd 0%, #2563eb 55%, #1d4ed8 100%);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+/* ===== TAB (NavLink) ===== */
 .appTab {
   position: relative;
   display: inline-flex;
@@ -57,93 +128,139 @@ body {
 
   color: var(--nav-muted);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.2px;
 
-  background: rgba(37, 99, 235, 0.06); /* tint nhẹ */
+  background: rgba(37, 99, 235, 0.06);
   backdrop-filter: saturate(120%);
+
+  transform: translateY(0);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
 
   transition:
     transform var(--dur) var(--easing),
     box-shadow var(--dur) var(--easing),
     background var(--dur) var(--easing),
     color var(--dur) var(--easing),
-    border-color var(--dur) var(--easing);
+    border-color var(--dur) var(--easing),
+    filter var(--dur) var(--easing);
 }
 
-/* Icon/Badge (nếu sau này có) */
-.appTab > * {
+/* “shimmer” nhẹ trên pill khi hover */
+.appTab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255,255,255,0.55) 35%,
+    transparent 70%
+  );
+  transform: translateX(-80%);
+  opacity: 0;
+  transition: opacity var(--dur) var(--easing);
   pointer-events: none;
 }
 
-/* Hover: nâng nhẹ + đổi shadow + màu */
+.appTab:hover::before {
+  opacity: 0.8;
+  animation: tabShimmer 700ms var(--easing) 1;
+}
+
+@keyframes tabShimmer {
+  to { transform: translateX(80%); }
+}
+
+/* Hover: nâng + shadow + màu */
 .appTab:hover {
   transform: translateY(-2px);
   background: rgba(37, 99, 235, 0.12);
-  box-shadow: var(--nav-shadow-hover);
+  box-shadow: var(--shadow-hover);
   color: var(--nav-text);
-  border-color: rgba(37, 99, 235, 0.18);
+  border-color: rgba(37, 99, 235, 0.20);
 }
 
-/* Focus visible: outline rõ ràng, đẹp */
+/* Press (click): feel “bấm” */
+.appTab:active {
+  transform: translateY(0px) scale(0.99);
+  filter: brightness(0.98);
+}
+
+/* Focus visible accessibility */
 .appTab:focus-visible {
   outline: 3px solid rgba(37, 99, 235, 0.35);
   outline-offset: 3px;
 }
 
-/* Active: gradient + glow */
+/* Active: gradient + glow + pulse nhẹ */
 .appTab.active {
   color: #fff;
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 55%, #0b5cff 100%);
-  border-color: rgba(37, 99, 235, 0.35);
+  border-color: rgba(37, 99, 235, 0.38);
   box-shadow:
-    0 10px 24px rgba(37, 99, 235, 0.25),
-    0 0 0 4px rgba(37, 99, 235, 0.14);
+    0 12px 26px rgba(37, 99, 235, 0.28),
+    0 0 0 5px rgba(37, 99, 235, 0.14);
+  animation: activePulse 1.8s ease-in-out infinite;
 }
 
-/* Active hover: vẫn giữ active nhưng “nổi” hơn chút */
+@keyframes activePulse {
+  0%, 100% {
+    box-shadow:
+      0 12px 26px rgba(37, 99, 235, 0.26),
+      0 0 0 5px rgba(37, 99, 235, 0.13);
+  }
+  50% {
+    box-shadow:
+      0 14px 30px rgba(37, 99, 235, 0.34),
+      0 0 0 6px rgba(37, 99, 235, 0.18);
+  }
+}
+
 .appTab.active:hover {
   transform: translateY(-2px);
-  box-shadow:
-    0 14px 34px rgba(37, 99, 235, 0.32),
-    0 0 0 4px rgba(37, 99, 235, 0.16);
 }
 
-/* ===== Underline / Indicator kiểu CSS đơn giản =====
-   Không JS: dùng underline “trượt” nhẹ ngay dưới text của tab đang hover/active.
-   (Indicator toàn-width chạy theo tab cần JS để đo vị trí; cách này vẫn tạo cảm giác mượt và clean.)
-*/
+/* ===== Underline Indicator (CSS-only, mượt) ===== */
 .appTab::after {
   content: "";
   position: absolute;
-  left: 14px;
-  right: 14px;
+  left: 16px;
+  right: 16px;
   bottom: 6px;
-
   height: 3px;
   border-radius: 999px;
 
-  background: rgba(37, 99, 235, 0.0);
+  background: rgba(37, 99, 235, 0);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--dur) var(--easing), background var(--dur) var(--easing);
+  transition:
+    transform var(--dur) var(--easing),
+    background var(--dur) var(--easing);
 }
 
 .appTab:hover::after {
-  background: rgba(37, 99, 235, 0.45);
+  background: rgba(37, 99, 235, 0.50);
   transform: scaleX(1);
 }
 
 .appTab.active::after {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   transform: scaleX(1);
 }
 
-/* Responsive: trên màn nhỏ, tab dễ bấm hơn */
+/* ===== Responsive ===== */
 @media (max-width: 576px) {
   .appTabs {
     gap: 8px;
     padding: 10px;
+  }
+
+  .appTabs .navBrand {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 2px;
   }
 
   .appTab {
@@ -152,10 +269,14 @@ body {
   }
 }
 
-/* Người dùng chọn giảm motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  .appTabs::after,
   .appTab,
-  .appTab::after {
+  .appTab::before,
+  .appTab::after,
+  .appTab.active {
+    animation: none !important;
     transition: none !important;
   }
 

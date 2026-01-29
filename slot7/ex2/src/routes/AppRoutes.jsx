@@ -5,7 +5,6 @@ import Ex1Page from "../pages/Ex1Page";
 import Ex2Page from "../pages/Ex2Page";
 import Ex3Page from "../pages/Ex3Page";
 import Ex4Page from "../pages/Ex4Page";
-import Ex5Page from "../pages/Ex5Page";
 
 export default function AppRoutes() {
   return (
@@ -15,7 +14,6 @@ export default function AppRoutes() {
       <Route path="/ex2" element={<Ex2Page />} />
       <Route path="/ex3" element={<Ex3Page />} />
       <Route path="/ex4" element={<Ex4Page />} />
-      <Route path="/ex5" element={<Ex5Page />} />
       <Route path="*" element={<div>404 - Not Found</div>} />
     </Routes>
   );

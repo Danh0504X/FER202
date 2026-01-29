@@ -1,0 +1,106 @@
+:root{
+  --bg:#f3f4f6;
+  --card:#fff;
+  --text:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --blue:#2563eb;
+  --blue2:#1d4ed8;
+  --red:#ef4444;
+  --green:#16a34a;
+  --shadow: 0 10px 25px rgba(0,0,0,.06);
+}
+
+*{ box-sizing:border-box; }
+body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; color:var(--text); background: var(--bg); }
+
+.card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.cardTitle{
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.form{ display:flex; flex-direction:column; gap: 12px; }
+.formGroup{ display:flex; flex-direction:column; gap: 6px; }
+
+.label{ font-size: 13px; font-weight: 700; color:#374151; }
+.input{
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0 12px;
+  outline: none;
+  font-size: 14px;
+  background:#fff;
+}
+.input:focus{
+  border-color: rgba(37,99,235,.8);
+  box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+}
+.inputSmall{ height: 34px; border-radius: 8px; }
+
+.btnRow{ display:flex; gap: 10px; margin-top: 4px; }
+
+.btn{
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.btnSm{ padding: 7px 10px; border-radius: 8px; margin-right: 8px; }
+
+.btnPrimary{ background: var(--blue); color:#fff; }
+.btnPrimary:hover{ background: var(--blue2); }
+
+.btnGhost{ background:#f3f4f6; color:#111827; }
+.btnGhost:hover{ background:#e5e7eb; }
+
+.btnDanger{ background: var(--red); color:#fff; }
+.btnDanger:hover{ filter: brightness(.95); }
+
+.tableWrap{ overflow:auto; }
+.table{
+  width:100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+.table th, .table td{
+  text-align:left;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  vertical-align: middle;
+}
+.table thead th{
+  border-top: 0;
+  font-size: 13px;
+  color:#374151;
+  background: #f9fafb;
+}
+.avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  object-fit: cover;
+}
+
+.badge{
+  display:inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.badgeGreen{ background: rgba(22,163,74,.12); color: var(--green); }
+.badgeRed{ background: rgba(239,68,68,.12); color: var(--red); }
+
+.rowLocked{ opacity: .75; }

@@ -1,0 +1,114 @@
+/* src/styles/todo.css */
+:root {
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --muted: rgba(15, 23, 42, 0.7);
+  --border: #e2e8f0;
+  --primary: #2563eb;
+
+  --shadow: 0 10px 30px rgba(2, 6, 23, 0.08);
+  --shadow-hover: 0 14px 36px rgba(2, 6, 23, 0.14);
+  --radius: 16px;
+}
+
+.todoPage {
+  background: var(--bg);
+  min-height: calc(100vh - 90px);
+  padding: 24px 0;
+  color: var(--text);
+}
+
+.todoCard {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.todoHeader {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.todoTitle {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  margin: 0;
+}
+
+.todoSub {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.todoInput {
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  padding: 12px 14px !important;
+}
+
+.todoInput:focus {
+  border-color: rgba(37, 99, 235, 0.45) !important;
+  box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15) !important;
+}
+
+.todoAddBtn {
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 60%, #0b5cff 100%) !important;
+  border: none !important;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.24);
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.todoAddBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.3);
+}
+
+.todoAddBtn:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 3px;
+}
+
+.todoList {
+  border-top: 1px solid var(--border);
+}
+
+.todoItem {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fff;
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.todoItem:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.todoText {
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  word-break: break-word;
+}
+
+.todoMeta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.todoDeleteBtn {
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+}
+
+.todoEmpty {
+  color: var(--muted);
+  text-align: center;
+  padding: 24px 0;
+}
