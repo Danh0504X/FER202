@@ -1,0 +1,117 @@
+/* ===== GRID chứa card: 4 card / 1 hàng (giống hình mẫu) ===== */
+.news-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* Responsive */
+@media (max-width: 1200px){
+  .news-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 992px){
+  .news-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 576px){
+  .news-grid{ grid-template-columns: 1fr; }
+}
+
+/* ===== News Card (cao hơn + hẹp hơn theo cột grid) ===== */
+.pcard{
+  background:#fff;
+  border:1px solid #e6e6e6;
+  border-radius:4px;
+  overflow:hidden;
+  box-shadow:none;
+  transition:border-color .15s ease, transform .15s ease;
+
+  display:flex;
+  flex-direction:column;
+  width: 100%;
+
+  /* kéo dài chiều dọc */
+  min-height: 460px; /* tăng 480–520 nếu muốn đứng hơn */
+}
+
+.pcard:hover{
+  border-color:#cfcfcf;
+  transform:translateY(-2px);
+}
+
+.pcard-imgWrap{
+  cursor:pointer;
+  height:220px;     /* tăng/giảm: 200–260 tuỳ bạn */
+  overflow:hidden;
+}
+
+.pcard-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.pcard-body{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  flex:1;
+}
+
+.pcard-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.pcard-title{
+  margin:0;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.35;
+  color:#111;
+
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.pcard-id{
+  font-size:12px;
+  color:#888;
+  white-space:nowrap;
+}
+
+.pcard-desc{
+  margin:0;
+  font-size:13px;
+  color:#6c757d;
+  line-height:1.45;
+
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.pcard-actions{
+  margin-top:auto;
+}
+
+.pcard-detailBtn{
+  background:transparent;
+  border:none;
+  padding:0;
+  color:#0d6efd;
+  font-size:12px;
+  font-weight:600;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+.pcard-detailBtn:hover{
+  color:#0a58ca;
+}
