@@ -1,14 +1,20 @@
-import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { Navigate } from 'react-router-dom';
-//kiểm tra xem người dùng đã đăng nhập chưa, nếu chưa chuyển hướng đến trang đăng nhập
-function ProtectedRoute({ children }) {
-    const { state } = useAuth();
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-    if (!state.isAuthenticated) {
-        return <Navigate to="/login" />;        
-    }
-    return children;
+function ProtectedRoute({ children }) {
+  const { isAuthenticated, loading, user, error } = useSelector(
+    (state) => state.auth
+  );
+
+  if (loading) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 }
 
 export default ProtectedRoute;

@@ -1,11 +1,8 @@
 import axios from 'axios';
 
-export const loginAction = async (dispatch, credentials) => {
-  dispatch({ type: 'LOGIN_START' });
-
+export const loginAction = async (credentials) => {
   try {
     const response = await axios.get('http://localhost:3001/users');
-
     const users = response.data;
 
     const user = users.find(
@@ -14,26 +11,19 @@ export const loginAction = async (dispatch, credentials) => {
         u.password === credentials.password
     );
 
-    if (user) {
-      delete user.password;
-
-      dispatch({ type: 'LOGIN_SUCCESS', payload: { user } });
-      console.log('User logged in:', user);
-
-      return { success: true, user };
-    } else {
-      const errorMessage = 'Tài khoản hoặc mật khẩu không chính xác';
-
-      dispatch({ type: 'LOGIN_FAILURE', payload: { error: errorMessage } });
-
-      return { success: false, message: errorMessage };
+    if (!user) {
+      return {
+        success: false,
+        message: 'Tài khoản hoặc mật khẩu không chính xác',
+      };
     }
+
+    const { password, ...safeUser } = user;
+    return { success: true, user: safeUser };
   } catch (error) {
-    const errorMessage =
-      error.response?.data?.message || 'Không thể kết nối đến máy chủ';
-
-    dispatch({ type: 'LOGIN_FAILURE', payload: { error: errorMessage } });
-
-    return { success: false, message: errorMessage };
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Không thể kết nối đến máy chủ',
+    };
   }
 };

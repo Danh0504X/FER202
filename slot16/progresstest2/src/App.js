@@ -1,36 +1,31 @@
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import { AuthProvider } from './contexts/AuthContext';
-import LoginForm from './components/LoginForm';
-import ProtectedRoute from './routes/ProtectedRoute';
-
-import ExpensesDashboard from './components/ExpenseDashboard';  
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import LoginForm from "./components/LoginForm";
+import ExpenseDashboard from "./components/ExpenseDashboard";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
-    <AuthProvider>
+    <Provider store={store}>
       <Router>
         <Routes>
-
-          {/* Route login */}
           <Route path="/login" element={<LoginForm />} />
 
-          {/* Route được bảo vệ */}
           <Route
             path="/"
             element={
               <ProtectedRoute>
-                <ExpensesDashboard   />
+                <ExpenseDashboard />
               </ProtectedRoute>
             }
           />
-
         </Routes>
       </Router>
-    </AuthProvider>
+    </Provider>
   );
 }
 

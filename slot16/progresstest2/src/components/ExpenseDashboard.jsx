@@ -1,127 +1,132 @@
-//ExpensesDashboard.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Container, Row, Col, Card, Table, Form, Button } from 'react-bootstrap';
-import { useAuth } from '../contexts/AuthContext';
-import { getExpenses, addExpense, updateExpense, deleteExpense } from '../services/ExpensesAPI';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addExpense,
+  deleteExpense,
+  fetchExpenses,
+  updateExpense,
+} from '../redux/slices/expensesSlice';
 import FooterExpenses from './FooterExpenses';
 import ModalConfirm from './ModalConfirm';
-import { formatCurrency, formatDate } from '../utils/formatters';   
+import { formatCurrency, formatDate } from '../utils/formatters';
 import NavbarExpenses from './NavbarExpenses';
-function ExpensesDashboard() {
-  const { state } = useAuth();
 
-  // Danh sách expenses
-  const [expenses, setExpenses] = useState([]);
-  // Bộ lọc category
+function ExpensesDashboard() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const { items: allExpenses, loading, error } = useSelector(
+    (state) => state.expenses
+  );
+
   const [filterCategory, setFilterCategory] = useState('All categories');
-  // Form data cho Add/Edit
   const [formData, setFormData] = useState({
-    name: '', amount: '', category: 'Food', date: ''
+    name: '',
+    amount: '',
+    category: 'Food',
+    date: '',
   });
-  // ID đang edit (null = chế độ Add)
   const [editingId, setEditingId] = useState(null);
-  // Modal xác nhận xóa
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  // Form validation
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // ===== FETCH DATA =====
-  const fetchExpenses = async () => {
-    try {
-      const data = await getExpenses(); //gọi API để lấy tất cả expenses
-      // Lọc theo userId của user đang đăng nhập
-      const userExpenses = data.filter(e => e.userId === state.user.id);
-      setExpenses(userExpenses);
-    } catch (error) {
-      console.error('Error fetching expenses:', error);
-    }
-  };
-
   useEffect(() => {
-    if (state.user) {
-      fetchExpenses();
+    if (user) {
+      dispatch(fetchExpenses());
     }
-  }, [state.user]);
+  }, [user, dispatch]);
 
-  // ===== COMPUTED VALUES =====
-  // Danh sách category duy nhất (cho dropdown filter)
-  const categories = [...new Set(expenses.map(e => e.category))];
-
-  // Lọc expense theo category đã chọn
-  const filteredExpenses = filterCategory === 'All categories'
-    ? expenses
-    : expenses.filter(e => e.category === filterCategory);
-
-  // Tổng tiền
-  const totalExpenses = filteredExpenses.reduce(
-    (sum, e) => sum + Number(e.amount), 0
+  const expenses = useMemo(
+    () => allExpenses.filter((e) => e.userId === user?.id),
+    [allExpenses, user]
   );
 
-  
+  const categories = [...new Set(expenses.map((e) => e.category))];
 
-  // ===== VALIDATION =====
+  const filteredExpenses =
+    filterCategory === 'All categories'
+      ? expenses
+      : expenses.filter((e) => e.category === filterCategory);
+
+  const totalExpenses = filteredExpenses.reduce(
+    (sum, e) => sum + Number(e.amount),
+    0
+  );
+
   const validate = () => {
     const newErrors = {};
+
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required.';
     }
+
     if (!formData.amount || Number(formData.amount) <= 0) {
       newErrors.amount = 'Amount must be greater than 0.';
     }
+
     if (!formData.date) {
       newErrors.date = 'Date is required.';
     }
+
     return newErrors;
   };
 
-  // ===== FORM HANDLERS =====
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    // Xóa lỗi khi user bắt đầu nhập
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
   const handleReset = () => {
-    setFormData({ name: '', amount: '', category: 'Food', date: '' });
+    setFormData({
+      name: '',
+      amount: '',
+      category: 'Food',
+      date: '',
+    });
     setEditingId(null);
     setValidated(false);
     setErrors({});
   };
 
-  // Save: Add mới hoặc Update
   const handleSave = async (e) => {
     e.preventDefault();
+
     const newErrors = validate();
     setValidated(true);
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
+
     try {
       const expenseData = {
         ...formData,
-        userId: state.user.id,
+        userId: user.id,
         amount: Number(formData.amount),
       };
 
       if (editingId) {
-        await updateExpense(editingId, expenseData);
+        await dispatch(
+          updateExpense({ id: editingId, updatedExpense: expenseData })
+        ).unwrap();
       } else {
-        await addExpense(expenseData);
+        await dispatch(addExpense(expenseData)).unwrap();
       }
-      fetchExpenses();
+
       handleReset();
     } catch (error) {
       console.error('Error saving expense:', error);
     }
   };
 
-  // Click Edit → fill form
   const handleEdit = (expense) => {
     setFormData({
       name: expense.name,
@@ -132,20 +137,20 @@ function ExpensesDashboard() {
     setEditingId(expense.id);
   };
 
-  // Click Delete → mở modal xác nhận
   const handleDeleteClick = (id) => {
     setDeleteId(id);
     setShowModal(true);
   };
 
-  // Confirm Delete
   const handleConfirmDelete = async () => {
     try {
-      await deleteExpense(deleteId);
-      fetchExpenses();
+      await dispatch(deleteExpense(deleteId)).unwrap();
       setShowModal(false);
       setDeleteId(null);
-      if (editingId === deleteId) handleReset();
+
+      if (editingId === deleteId) {
+        handleReset();
+      }
     } catch (error) {
       console.error('Error deleting expense:', error);
     }
@@ -153,12 +158,15 @@ function ExpensesDashboard() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
-      {/* ===== NAVBAR ===== */}
       <NavbarExpenses />
 
-      {/* ===== MAIN CONTENT ===== */}
       <Container className="my-4 flex-grow-1">
-        {/* Row 1: Total + Filter */}
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
         <Row className="mb-4">
           <Col md={6}>
             <Card>
@@ -168,6 +176,7 @@ function ExpensesDashboard() {
               </Card.Body>
             </Card>
           </Col>
+
           <Col md={6}>
             <Card>
               <Card.Body>
@@ -176,10 +185,13 @@ function ExpensesDashboard() {
                 <Form.Select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
+                  disabled={loading}
                 >
                   <option>All categories</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
                   ))}
                 </Form.Select>
               </Card.Body>
@@ -187,20 +199,21 @@ function ExpensesDashboard() {
           </Col>
         </Row>
 
-        {/* Row 2: Form + Table */}
         <Row>
-          {/* Form Add/Edit */}
           <Col md={4}>
             <Card>
               <Card.Body>
                 <h5>{editingId ? 'Edit Expense' : 'Add Expense'}</h5>
+
                 <Form noValidate onSubmit={handleSave}>
                   <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
-                      type="text" name="name"
+                      type="text"
+                      name="name"
                       value={formData.name}
                       onChange={handleInputChange}
+                      disabled={loading}
                       isInvalid={validated && !!errors.name}
                       isValid={validated && !errors.name}
                     />
@@ -213,9 +226,11 @@ function ExpensesDashboard() {
                     <Col>
                       <Form.Label>Amount</Form.Label>
                       <Form.Control
-                        type="number" name="amount"
+                        type="number"
+                        name="amount"
                         value={formData.amount}
                         onChange={handleInputChange}
+                        disabled={loading}
                         isInvalid={validated && !!errors.amount}
                         isValid={validated && !errors.amount}
                       />
@@ -223,12 +238,14 @@ function ExpensesDashboard() {
                         {errors.amount}
                       </Form.Control.Feedback>
                     </Col>
+
                     <Col>
                       <Form.Label>Category</Form.Label>
                       <Form.Select
                         name="category"
                         value={formData.category}
                         onChange={handleInputChange}
+                        disabled={loading}
                       >
                         <option value="Food">Food</option>
                         <option value="Utilities">Utilities</option>
@@ -241,9 +258,11 @@ function ExpensesDashboard() {
                   <Form.Group className="mb-3">
                     <Form.Label>Date</Form.Label>
                     <Form.Control
-                      type="date" name="date"
+                      type="date"
+                      name="date"
                       value={formData.date}
                       onChange={handleInputChange}
+                      disabled={loading}
                       isInvalid={validated && !!errors.date}
                       isValid={validated && !errors.date}
                     />
@@ -253,15 +272,18 @@ function ExpensesDashboard() {
                   </Form.Group>
 
                   <div className="d-flex gap-2">
-                    <Button variant="secondary" onClick={handleReset}>Reset</Button>
-                    <Button variant="primary" type="submit">Save</Button>
+                    <Button variant="secondary" onClick={handleReset}>
+                      Reset
+                    </Button>
+                    <Button variant="primary" type="submit" disabled={loading}>
+                      {loading ? 'Saving...' : 'Save'}
+                    </Button>
                   </div>
                 </Form>
               </Card.Body>
             </Card>
           </Col>
 
-          {/* Table */}
           <Col md={8}>
             <Card>
               <Card.Body>
@@ -277,7 +299,7 @@ function ExpensesDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredExpenses.map(expense => (
+                    {filteredExpenses.map((expense) => (
                       <tr key={expense.id}>
                         <td>{expense.name}</td>
                         <td>{formatCurrency(expense.amount)}</td>
@@ -285,14 +307,19 @@ function ExpensesDashboard() {
                         <td>{formatDate(expense.date)}</td>
                         <td>
                           <Button
-                            variant="warning" size="sm" className="me-2"
+                            variant="warning"
+                            size="sm"
+                            className="me-2"
                             onClick={() => handleEdit(expense)}
+                            disabled={loading}
                           >
                             Edit
                           </Button>
                           <Button
-                            variant="danger" size="sm"
+                            variant="danger"
+                            size="sm"
                             onClick={() => handleDeleteClick(expense.id)}
+                            disabled={loading}
                           >
                             Delete
                           </Button>
@@ -309,7 +336,6 @@ function ExpensesDashboard() {
 
       <FooterExpenses />
 
-      {/* ===== MODAL CONFIRM DELETE ===== */}
       <ModalConfirm
         show={showModal}
         title="Confirm Delete"
@@ -322,4 +348,3 @@ function ExpensesDashboard() {
 }
 
 export default ExpensesDashboard;
-
