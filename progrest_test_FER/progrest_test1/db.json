@@ -6,7 +6,7 @@
       "email": "fudn@fptu.edu.vn",
       "password": "123456",
       "role": "admin",
-      "status": "locked",
+      "status": "active",
       "avatar": "/images/users/fudn.png"
     },
     {
@@ -33,7 +33,7 @@
       "email": "thienbao@gmail.com",
       "password": "123456",
       "role": "user",
-      "status": "locked",
+      "status": "active",
       "avatar": "/images/users/thienbao.png"
     },
     {
@@ -54,5 +54,6 @@
       "status": "active",
       "avatar": "/images/users/thanhtai.png"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

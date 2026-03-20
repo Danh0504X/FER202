@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { getAccountById } from "../services/accountService";
 import { Card, Button, Badge } from "react-bootstrap";
 
 function AccountDetailPage() {
@@ -15,10 +15,8 @@ function AccountDetailPage() {
   }, []);
 
   const fetchAccount = async () => {
-    const res = await axios.get(
-      `http://localhost:3000/accounts/${id}`
-    );
-    setAccount(res.data);
+    const data = await getAccountById(id);
+    setAccount(data);
   };
 
   if (!account) return <p>Loading...</p>;
